@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+	
+	<hibernate-mapping>
+	<class name="com.app.entity.Candidate" table="candidate">
+	
+	<id name="id" column="id">
+	<generator class="assigned" />
+	</id>
+	
+	<property name="name"/>
+	
+	<property name="username"/>
+	<property name="password"/>
+	<property name="description"/>
+	<property name="gender"/>
+	
+	
+	<set name="skills" inverse="true" cascade="all">
+            <key column="cid" not-null="true" />
+            <one-to-many class="com.app.entity.Skills"/>
+    </set>
+	
+	<property name="standard" />
+
+	<set name="prolang" inverse="true" cascade="all">
+            <key column="cid" not-null="true" />
+            <one-to-many class="com.app.entity.ProgLang"/>
+    </set>
+	
+	
+	<one-to-one name="file" class="com.app.entity.File" cascade="all" ></one-to-one>
+	
+	</class>
+	</hibernate-mapping>
