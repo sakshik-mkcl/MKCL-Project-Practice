@@ -1,15 +1,11 @@
 package com.app.controller;
-
 import java.io.File;
-
-import com.app.entity.FileObject;
+import com.app.entity.DataStore;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -20,34 +16,27 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class FileController {
-	
-	
-	
+
+
 	@RequestMapping("/")
 	public String home() {
 		return "index";
 		
 	}
 
-HashSet<FileObject> list = new HashSet<FileObject>();
-
 String name;
 @PostMapping("/upload")
-public String saveFileUpload( @RequestParam("file") CommonsMultipartFile file, 
-		@ModelAttribute("file") FileObject f,
-		HttpSession s,HttpServletRequest request, HttpServletResponse response, 
+public String saveFileUpload( @RequestParam("file") CommonsMultipartFile file,HttpServletRequest request, HttpServletResponse response, 
 		Model model, RedirectAttributes redirectAttributes) throws IOException 
         {
         System.out.println("----------------------->"+file.getName());
@@ -61,13 +50,10 @@ public String saveFileUpload( @RequestParam("file") CommonsMultipartFile file,
         name = file.getOriginalFilename();
         System.out.println(name);
         
-       
-		list.add( new FileObject(name));
-        System.out.println(list);
+       //add values into list
+        DataStore.list.add( name);
+        System.out.println(DataStore.list);
 		
-        //Store list in RedirectAttributes
-        redirectAttributes.addFlashAttribute("list", list);
-
        
         HttpSession session = request.getSession();
         session.setAttribute("fileName", name);
@@ -157,9 +143,5 @@ public void downloadAllFiles(@PathVariable("fileName") String fileName, HttpServ
         System.out.println("No files found to download");
     }
 }
-
-
-
-
 
 }
